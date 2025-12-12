@@ -17,11 +17,11 @@ import torch
 from torch import nn
 
 from gluonts.core.component import validated
-from gluonts.torch.modules.feature import FeatureEmbedder
 from gluonts.model import Input, InputSpec
 from gluonts.torch.distributions import Output
-from gluonts.torch.scaler import StdScaler, MeanScaler, NOPScaler
 from gluonts.torch.model.simple_feedforward import make_linear_layer
+from gluonts.torch.modules.feature import FeatureEmbedder
+from gluonts.torch.scaler import MeanScaler, NOPScaler, StdScaler
 from gluonts.torch.util import weighted_average
 
 
@@ -246,6 +246,7 @@ class TiDEModel(nn.Module):
         scaling: Optional[str],
     ) -> None:
         super().__init__()
+        print("LOSS COMPUTED ON TARGET SCALE")
 
         assert context_length > 0
         assert prediction_length > 0
@@ -433,7 +434,8 @@ class TiDEModel(nn.Module):
             past_observed_values=past_observed_values,
             future_time_feat=future_time_feat,
         )
+        future_target_scaled = (future_target - loc) / scale
         loss = self.distr_output.loss(
-            target=future_target, distr_args=distr_args, loc=loc, scale=scale
+            target=future_target_scaled, distr_args=distr_args
         )
         return weighted_average(loss, weights=future_observed_values, dim=-1)
