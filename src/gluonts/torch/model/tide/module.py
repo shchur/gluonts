@@ -246,6 +246,7 @@ class TiDEModel(nn.Module):
         scaling: Optional[str],
     ) -> None:
         super().__init__()
+        print("USING NORMALIZED FUTURE TARGET")
 
         assert context_length > 0
         assert prediction_length > 0
