@@ -287,7 +287,8 @@ class PatchTSTModel(nn.Module):
             past_time_feat=past_time_feat,
             future_time_feat=future_time_feat,
         )
+        future_target_scaled = (future_target - loc) / scale
         loss = self.distr_output.loss(
-            target=future_target, distr_args=distr_args, loc=loc, scale=scale
+            target=future_target_scaled, distr_args=distr_args
         )
         return weighted_average(loss, weights=future_observed_values, dim=-1)

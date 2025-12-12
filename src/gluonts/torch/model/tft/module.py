@@ -415,10 +415,9 @@ class TemporalFusionTransformerModel(nn.Module):
             past_feat_dynamic_real=past_feat_dynamic_real,
             past_feat_dynamic_cat=past_feat_dynamic_cat,
         )  # [N, Q, T]
+        future_target_scaled = (future_target - loc) / scale
         loss = self.distr_output.loss(
-            target=future_target,
+            target=future_target_scaled,
             distr_args=distr_args,
-            loc=loc,
-            scale=scale,
         )
         return weighted_average(loss, weights=future_observed_values, dim=-1)

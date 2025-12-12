@@ -16,10 +16,8 @@ import torch
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from gluonts.core.component import validated
-
 from gluonts.itertools import select
 from gluonts.torch.model.lightning_util import has_validation_loop
-
 
 from .module import TiDEModel
 

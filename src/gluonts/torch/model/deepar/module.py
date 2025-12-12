@@ -559,10 +559,10 @@ class DeepARModel(nn.Module):
             sliced_params = tuple(
                 [p[:, -self.prediction_length :] for p in params]
             )
+            future_target_scaled = future_target_reshaped / scale
             loss_values = self.distr_output.loss(
-                target=future_target_reshaped,
+                target=future_target_scaled,
                 distr_args=sliced_params,
-                scale=scale,
             )
             loss_values = loss_values * future_observed_reshaped
         else:
@@ -579,8 +579,9 @@ class DeepARModel(nn.Module):
             observed_values = torch.cat(
                 (context_observed, future_observed_reshaped), dim=1
             )
+            target_scaled = target / scale
             loss_values = self.distr_output.loss(
-                target=target, distr_args=params, scale=scale
+                target=target_scaled, distr_args=params
             )
             loss_values = loss_values * observed_values
 

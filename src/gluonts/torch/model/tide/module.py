@@ -246,7 +246,6 @@ class TiDEModel(nn.Module):
         scaling: Optional[str],
     ) -> None:
         super().__init__()
-        print("LOSS COMPUTED ON TARGET SCALE")
 
         assert context_length > 0
         assert prediction_length > 0
